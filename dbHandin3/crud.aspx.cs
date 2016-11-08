@@ -21,9 +21,7 @@ namespace dbHandin3
                 FormsAuthentication.RedirectToLoginPage();
             }
             
-            UpdateGridView();
-
-            
+            UpdateGridView();         
         }
 
         public string MyDb()
@@ -71,7 +69,6 @@ namespace dbHandin3
             SqlCommand cmd = null;
             string sqldel = "delete from pokecatches where catchid = @catchid";
 
-
             try
             {
                 conn.Open();
@@ -107,7 +104,7 @@ namespace dbHandin3
         // Display random pokemon on page
         protected void ButtonCatchPokemon_Click(object sender, EventArgs e)
         {
-
+           
             SqlConnection conn = new SqlConnection(MyDb());
             SqlDataReader rdr = null;
             SqlCommand cmd = null;
@@ -139,11 +136,11 @@ namespace dbHandin3
                     //writePokemon += "<h5>" + randomPokemon.id + "</h5>";
                     writePokemon += "<h4 style='font-weight:bolder'>A wild " + randomPokemon.name + " appears!</h4>";
                     writePokemon += "<img src=" + randomPokemon.image + " width='150' style='margin-top:30px;'>";
-                    writePokemon += "";
                     writePokemon += "</div>";                   
                     LiteralPokemon.Text = writePokemon;
 
                     Session["caughtPokemon"] = randomPokemon.id;
+                    Session["pokemonName"] = randomPokemon.name;
 
                 }
             }
@@ -195,6 +192,8 @@ namespace dbHandin3
         // Catch Pokemon based on random number
         protected void ButtonCatch_Click(object sender, EventArgs e)
         {
+            
+
             SqlConnection conn = new SqlConnection(MyDb());
             SqlDataAdapter da = null;          
             DataSet ds = null;
@@ -248,7 +247,7 @@ namespace dbHandin3
 
                     da.InsertCommand = cmd;
                     da.Update(ds, "caughtPokemon");
-                    LiteralCatchMessage.Text = "<div class='alert alert-success msg'>You were strong enough! The Pokémon has been caught!</div>";
+                    LiteralCatchMessage.Text = "<div class='alert alert-success msg'>You were strong enough! <b>" + Session["pokemonName"] + "</b> has been caught!</div>";
 
                     UpdateGridView();
 
@@ -265,7 +264,7 @@ namespace dbHandin3
                 }
             else
             {
-                LiteralCatchMessage.Text = "<div class='alert alert-danger msg'>Pokémon is way too strong. Try again or return when you are more experienced..</div>";
+                LiteralCatchMessage.Text = "<div class='alert alert-danger msg'><b>" + Session["pokemonName"] + "</b> is way too strong. Try again or return when you are more experienced ..</div>";
             }
         }
     }

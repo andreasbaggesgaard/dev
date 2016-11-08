@@ -11,7 +11,7 @@
       <p>Welcome <b><asp:LoginName ID="LoginName1" runat="server" /></b> - Here you can catch new Pokémons, evolve existing ones and delete those in your pokeball</p>
              <br />
              <br />
-            <asp:Button ID="ButtonCatchPokemon" runat="server" OnClick="ButtonCatchPokemon_Click" Text="Catch a Pokémon" CssClass="trycatch btn btn-danger explore"/>
+            <asp:Button ID="ButtonCatchPokemon" runat="server" OnClick="ButtonCatchPokemon_Click" Text="Catch a Pokémon" CssClass="trycatch btn btn-danger explore" EnableViewState="False"/>
              <br />
              <br />
             <asp:Literal ID="LiteralCatchMessage" runat="server"></asp:Literal>
