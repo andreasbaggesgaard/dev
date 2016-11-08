@@ -128,7 +128,7 @@ namespace dbHandin3
                     var randomPokemon = pokemonList[index];
 
                     string writePokemon = "";
-
+                     
                     writePokemon += "<div>"; 
                     writePokemon += "<h5>" + randomPokemon.id + "</h5>";
                     writePokemon += "<h3>" + randomPokemon.name + "</h5>";
