@@ -19,7 +19,7 @@ namespace dbHandin3
                 string getSessionUser = HttpContext.Current.User.Identity.Name;
 
 
-                if (getSessionUser == "webmaster" || getSessionUser == "Webmaster")
+                if (getSessionUser == "webmaster")
                 {
                     pokeball.PostBackUrl = "webmaster.aspx";
                 }

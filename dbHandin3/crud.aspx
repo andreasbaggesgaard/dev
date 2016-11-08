@@ -4,9 +4,32 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-     <div class="jumbotron">
+     <div class="jumbotron" style="min-height: 415px;">
+         <div class="row">
+         <div class="col-md-8">
       <h1>Pokehunter</h1>
-      <p>Welcome <b><asp:LoginName ID="LoginName1" runat="server" /></b> - Here you can catch new Pokémons, and delete those in your pokeball</p>
+      <p>Welcome <b><asp:LoginName ID="LoginName1" runat="server" /></b> - Here you can catch new Pokémons, evolve existing ones and delete those in your pokeball</p>
+             <br />
+             <br />
+            <asp:Button ID="ButtonCatchPokemon" runat="server" OnClick="ButtonCatchPokemon_Click" Text="Catch a Pokémon" CssClass="trycatch btn btn-danger explore"/>
+             <br />
+             <br />
+            <asp:Literal ID="LiteralCatchMessage" runat="server"></asp:Literal>
+        </div>
+         <div class="col-md-4">
+             <div class="pokemon-container pull-right">
+                 <div class="literalpokemon" style="height: 300px; width: 200px;">
+                  <asp:Literal ID="LiteralPokemon" runat="server"></asp:Literal>
+
+                     <br />
+                     <br />
+
+                     <asp:Button type='button' ID='ButtonCatch' runat='server' OnClick='ButtonCatch_Click' CssClass='btn btn-warning cb' Text='Try to catch' />
+
+                     </div>   
+                 </div>
+          </div>
+        </div>
     </div>
     
     <h4>Caught Pokémons:</h4>
@@ -38,12 +61,9 @@
  <br />
      <br />
      <br />
-     <asp:Literal ID="LiteralPokemon" runat="server"></asp:Literal>
+
      <br />
      <br />
-     <asp:Button ID="ButtonCatchPokemon" runat="server" OnClick="ButtonCatchPokemon_Click" Text="Catch a Pokémon" />
-     <br />
-     <br />
-     <asp:Label ID="LabelCatchMessage" runat="server"></asp:Label>
+    
 
  </asp:Content>

@@ -41,7 +41,7 @@ namespace dbHandin3
                 {
                     rdr.Read();
                    
-                    FormsAuthentication.RedirectFromLoginPage(TextBoxAlias.Text, true);
+                    FormsAuthentication.RedirectFromLoginPage(TextBoxAlias.Text.ToLower(), true);
 
                     if(TextBoxAlias.Text.ToLower() == "webmaster")
                     {

@@ -23,23 +23,28 @@ namespace dbHandin3
             
             UpdateGridView();
 
+            
         }
 
-        public string myDb()
+        public string MyDb()
         {
             database db = new database();
             return db.dbConnection();
         }
 
+        public string GetUser()
+        {
+            string getSessionUser;
+            return getSessionUser = HttpContext.Current.User.Identity.Name;
+        }
+
         public void UpdateGridView()
         {
-            string getSessionUser = HttpContext.Current.User.Identity.Name;
-
-            SqlConnection conn = new SqlConnection(myDb());
+        
+            SqlConnection conn = new SqlConnection(MyDb());
             SqlCommand cmd = null;
             SqlDataReader rdr = null;
-            string sqlsel = "select catchid,name,lvl,experience,health,power,defense,speed,nextevolution,image from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias= '" + getSessionUser + "'";
-
+            string sqlsel = "select catchid,name,lvl,experience,health,power,defense,speed,nextevolution,image from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias= '" + GetUser() + "'";
 
             try
             {
@@ -62,7 +67,7 @@ namespace dbHandin3
 
         public void GridViewPokemons_RowDeleting(Object sender, GridViewDeleteEventArgs e)
         {
-            SqlConnection conn = new SqlConnection(myDb());
+            SqlConnection conn = new SqlConnection(MyDb());
             SqlCommand cmd = null;
             string sqldel = "delete from pokecatches where catchid = @catchid";
 
@@ -99,13 +104,15 @@ namespace dbHandin3
             LabelPokemonName.Text = "ID: " + GridViewPokemons.SelectedRow.Cells[3].Text;
         }
 
+        // Display random pokemon on page
         protected void ButtonCatchPokemon_Click(object sender, EventArgs e)
         {
-            SqlConnection conn = new SqlConnection(myDb());
+
+            SqlConnection conn = new SqlConnection(MyDb());
             SqlDataReader rdr = null;
             SqlCommand cmd = null;
             string sqlsel = "select pokemonid, number, name, nextevolution, image from pokemons";
-            string sqlsel2 = "select * from pokecatches";
+            string sqlselCatches = "select catchid,name,nextevolution,health,power,defense,speed,experience, fk_pokehunterid from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias='" + GetUser() + "'";
 
             List<Pokemon> pokemonList = new List<Pokemon>();
 
@@ -128,26 +135,138 @@ namespace dbHandin3
                     var randomPokemon = pokemonList[index];
 
                     string writePokemon = "";
-                     
-                    writePokemon += "<div>"; 
-                    writePokemon += "<h5>" + randomPokemon.id + "</h5>";
-                    writePokemon += "<h3>" + randomPokemon.name + "</h5>";
-                    writePokemon += "<img src=" + randomPokemon.image + " width='200'>";
-                    writePokemon += "</div>";
-                    
+                    writePokemon += "<div class='pokemon pull-right'>"; 
+                    //writePokemon += "<h5>" + randomPokemon.id + "</h5>";
+                    writePokemon += "<h4 style='font-weight:bolder'>A wild " + randomPokemon.name + " appears!</h4>";
+                    writePokemon += "<img src=" + randomPokemon.image + " width='150' style='margin-top:30px;'>";
+                    writePokemon += "";
+                    writePokemon += "</div>";                   
                     LiteralPokemon.Text = writePokemon;
+
+                    Session["caughtPokemon"] = randomPokemon.id;
 
                 }
             }
             catch(Exception ex)
             {
-                LabelCatchMessage.Text = ex.Message;
+                LiteralCatchMessage.Text = ex.Message;
             }
             finally
             {
                 conn.Close();
+                
+            }         
+           
+        }
+
+        // Method to return current pokehunterid in session
+        public int GetHunterId()
+        {
+            SqlConnection conn = new SqlConnection(MyDb());
+            SqlDataReader rdr = null;
+            SqlCommand cmd = null;
+            string getId = null;
+            int pokeHunterId = 0;
+            string sqlsel = "select hunterid from pokehunters where alias='"+ GetUser() +"'";
+
+            try
+            {
+                conn.Open();
+                cmd = new SqlCommand(sqlsel, conn);
+                rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    getId = rdr[0].ToString();
+                    pokeHunterId = Convert.ToInt32(getId);
+                }
             }
-            
+            catch(Exception ex)
+            {
+                LiteralCatchMessage.Text = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }     
+            return pokeHunterId;
+        }
+
+        // Catch Pokemon based on random number
+        protected void ButtonCatch_Click(object sender, EventArgs e)
+        {
+            SqlConnection conn = new SqlConnection(MyDb());
+            SqlDataAdapter da = null;          
+            DataSet ds = null;
+            DataTable dt = null;
+            SqlCommand cmd = null;
+            string sqlsel = "select * from pokecatches";
+            string sqlins = "insert into pokecatches values (@lvl, @health, @power, @defense, @speed, @experience, @fk_pokehunterid, @fk_pokemonid)";
+
+            Random ifCaught = new Random();
+            int number = ifCaught.Next(1, 10);
+
+            if(number == 3 || number == 6 || number == 9)
+            {
+                try
+                {
+                    da = new SqlDataAdapter();
+                    da.SelectCommand = new SqlCommand(sqlsel, conn);
+
+                    ds = new DataSet();
+                    da.Fill(ds, "caughtPokemon");
+                    dt = ds.Tables["caughtPokemon"];
+
+                    Random random = new Random();
+                    int lvl = random.Next(1, 10); 
+                    int health = random.Next(1, 200);   
+                    int power = random.Next(1, 200);
+                    int defense = random.Next(1, 50);
+                    int speed = random.Next(1, 50);
+                    int experience = random.Next(1, 2000);
+
+                    DataRow newrow = dt.NewRow();
+                    newrow["lvl"] = lvl;
+                    newrow["health"] = health;
+                    newrow["power"] = power;
+                    newrow["defense"] = defense;
+                    newrow["speed"] = speed;
+                    newrow["experience"] = experience;
+                    newrow["fk_pokehunterid"] = GetHunterId();
+                    newrow["fk_pokemonid"] = Session["caughtPokemon"];
+                    dt.Rows.Add(newrow);
+
+                    cmd = new SqlCommand(sqlins, conn);
+                    cmd.Parameters.Add("@lvl", SqlDbType.Int, 10, "lvl");
+                    cmd.Parameters.Add("@health", SqlDbType.Int, 200, "health");
+                    cmd.Parameters.Add("@power", SqlDbType.Int, 200, "power");
+                    cmd.Parameters.Add("@defense", SqlDbType.Int, 50, "defense");
+                    cmd.Parameters.Add("@speed", SqlDbType.Int, 50, "speed");
+                    cmd.Parameters.Add("@experience", SqlDbType.Int, 2000, "experience");
+                    cmd.Parameters.Add("@fk_pokehunterid", SqlDbType.Int, 50, "fk_pokehunterid");
+                    cmd.Parameters.Add("@fk_pokemonid", SqlDbType.Int, 50, "fk_pokemonid");
+
+                    da.InsertCommand = cmd;
+                    da.Update(ds, "caughtPokemon");
+                    LiteralCatchMessage.Text = "<div class='alert alert-success msg'>You were strong enough! The Pokémon has been caught!</div>";
+
+                    UpdateGridView();
+
+                }
+                catch (Exception ex)
+                {
+                    LabelMessage.Text = ex.Message;
+                }
+                finally
+                {
+                    conn.Close();
+                }
+
+                }
+            else
+            {
+                LiteralCatchMessage.Text = "<div class='alert alert-danger msg'>Pokémon is way too strong. Try again or return when you are more experienced..</div>";
+            }
         }
     }
 }

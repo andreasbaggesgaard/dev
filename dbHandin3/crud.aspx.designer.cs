@@ -22,6 +22,42 @@ namespace dbHandin3 {
         protected global::System.Web.UI.WebControls.LoginName LoginName1;
         
         /// <summary>
+        /// ButtonCatchPokemon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonCatchPokemon;
+        
+        /// <summary>
+        /// LiteralCatchMessage control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal LiteralCatchMessage;
+        
+        /// <summary>
+        /// LiteralPokemon control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal LiteralPokemon;
+        
+        /// <summary>
+        /// ButtonCatch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button ButtonCatch;
+        
+        /// <summary>
         /// GridViewPokemons control.
         /// </summary>
         /// <remarks>
@@ -74,32 +110,5 @@ namespace dbHandin3 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button Button1;
-        
-        /// <summary>
-        /// LiteralPokemon control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal LiteralPokemon;
-        
-        /// <summary>
-        /// ButtonCatchPokemon control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button ButtonCatchPokemon;
-        
-        /// <summary>
-        /// LabelCatchMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LabelCatchMessage;
     }
 }
