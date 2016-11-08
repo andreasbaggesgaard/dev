@@ -11,5 +11,5 @@ namespace dbHandin3
         {
             return @"data source = .\sqlexpress; integrated security = true; database = pokemonRun";
         }   
-    }
+    } 
 }  
