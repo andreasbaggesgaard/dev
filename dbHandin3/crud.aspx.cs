@@ -129,7 +129,7 @@ namespace dbHandin3
 
                     string writePokemon = "";
 
-                    writePokemon += "<div>";
+                    writePokemon += "<div>"; 
                     writePokemon += "<h5>" + randomPokemon.id + "</h5>";
                     writePokemon += "<h3>" + randomPokemon.name + "</h5>";
                     writePokemon += "<img src=" + randomPokemon.image + " width='200'>";
