@@ -38,9 +38,12 @@
             OnRowDeleting="GridViewPokemons_RowDeleting"
             >
             <Columns>
-                <asp:CommandField ShowDeleteButton="True" ControlStyle-CssClass="btn btn-danger btn-xs"/>
-                <asp:CommandField ShowSelectButton="True" />
+                <asp:CommandField ShowDeleteButton="True" ControlStyle-CssClass="btn btn-danger btn-xs">
+<ControlStyle CssClass="btn btn-danger btn-xs"></ControlStyle>
+                </asp:CommandField>
+                <asp:CommandField ShowSelectButton="True" SelectText="Evolve" />
                 <asp:ImageField DataImageUrlField="image" ControlStyle-Width="100">
+<ControlStyle Width="100px"></ControlStyle>
                 </asp:ImageField>
             </Columns>
         </asp:GridView>
@@ -56,7 +59,7 @@
         <asp:Label ID="LabelPokemonName" runat="server" Text="Pokemon name"></asp:Label>
         <br />
         <br />
-        <asp:Button ID="Button1" runat="server" Text="Button" />
+        <asp:Button ID="ButtonUpdate" runat="server" Text="Button" />
 
  <br />
      <br />

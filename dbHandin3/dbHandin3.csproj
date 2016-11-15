@@ -110,6 +110,7 @@
     <Content Include="App_Themes\themeIndex\Index.skin" />
     <Content Include="App_Themes\themeWebmaster\themeWebmaster.skin" />
     <Content Include="App_Themes\themeCrud\themeCrud.skin" />
+    <None Include="Properties\PublishProfiles\dbhandin3 - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -162,6 +163,9 @@
     <Compile Include="webmaster.aspx.designer.cs">
       <DependentUpon>webmaster.aspx</DependentUpon>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

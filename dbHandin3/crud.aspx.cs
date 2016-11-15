@@ -19,8 +19,7 @@ namespace dbHandin3
             if (!this.Page.User.Identity.IsAuthenticated)
             {
                 FormsAuthentication.RedirectToLoginPage();
-            }
-            
+            }           
             UpdateGridView();         
         }
 
@@ -42,7 +41,7 @@ namespace dbHandin3
             SqlConnection conn = new SqlConnection(MyDb());
             SqlCommand cmd = null;
             SqlDataReader rdr = null;
-            string sqlsel = "select catchid,name,lvl,experience,health,power,defense,speed,nextevolution,image from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias= '" + GetUser() + "'";
+            string sqlsel = "select catchid,name,nextevolution,lvl,experience,health,power,defense,speed,image from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias= '" + GetUser() + "'";
 
             try
             {
@@ -94,8 +93,26 @@ namespace dbHandin3
 
         }
 
+        // evolve pokemon
         protected void GridViewPokemons_SelectedIndexChanged(object sender, EventArgs e)
         {
+            SqlConnection conn = new SqlConnection(MyDb());
+            SqlCommand cmd = null;
+            string sqlupd = "update pokecatches set companyname = @companyname, phone = @phone where shipperid = @shipperid";
+
+            try
+            {
+      
+            }
+            catch (Exception ex)
+            {
+                LabelMessage.Text = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+                UpdateGridView();
+            }
 
             TextBoxName.Text = GridViewPokemons.SelectedRow.Cells[4].Text;
             LabelPokemonName.Text = "ID: " + GridViewPokemons.SelectedRow.Cells[3].Text;
@@ -139,7 +156,7 @@ namespace dbHandin3
                     writePokemon += "</div>";                   
                     LiteralPokemon.Text = writePokemon;
 
-                    Session["caughtPokemon"] = randomPokemon.id;
+                    Session["caughtPokemonId"] = randomPokemon.id;
                     Session["pokemonName"] = randomPokemon.name;
 
                 }
@@ -163,7 +180,7 @@ namespace dbHandin3
             SqlDataReader rdr = null;
             SqlCommand cmd = null;
             string getId = null;
-            int pokeHunterId = 0;
+            int pokehunterId = 0;
             string sqlsel = "select hunterid from pokehunters where alias='"+ GetUser() +"'";
 
             try
@@ -175,7 +192,7 @@ namespace dbHandin3
                 while (rdr.Read())
                 {
                     getId = rdr[0].ToString();
-                    pokeHunterId = Convert.ToInt32(getId);
+                    pokehunterId = Convert.ToInt32(getId);
                 }
             }
             catch(Exception ex)
@@ -186,14 +203,12 @@ namespace dbHandin3
             {
                 conn.Close();
             }     
-            return pokeHunterId;
+            return pokehunterId;
         }
 
         // Catch Pokemon based on random number
         protected void ButtonCatch_Click(object sender, EventArgs e)
         {
-            
-
             SqlConnection conn = new SqlConnection(MyDb());
             SqlDataAdapter da = null;          
             DataSet ds = null;
@@ -232,7 +247,7 @@ namespace dbHandin3
                     newrow["speed"] = speed;
                     newrow["experience"] = experience;
                     newrow["fk_pokehunterid"] = GetHunterId();
-                    newrow["fk_pokemonid"] = Session["caughtPokemon"];
+                    newrow["fk_pokemonid"] = Session["caughtPokemonId"];
                     dt.Rows.Add(newrow);
 
                     cmd = new SqlCommand(sqlins, conn);
