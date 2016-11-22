@@ -32,7 +32,9 @@
         </div>
     </div>
     
-    <h4>Caught Pokémons:</h4>
+    <h4>
+        <asp:Label ID="LabelCaught" runat="server" Text="Caught Pokémons:"></asp:Label>
+     </h4>
         <asp:GridView ID="GridViewPokemons" CssClass="table crud" runat="server" 
             OnSelectedIndexChanged="GridViewPokemons_SelectedIndexChanged"
             OnRowDeleting="GridViewPokemons_RowDeleting"
@@ -51,15 +53,17 @@
         <asp:Label ID="LabelMessage" runat="server" ForeColor="#33CC33"></asp:Label>
         <br />
         <br />
+      <!--
         <asp:Label ID="LabelSelected" runat="server" ForeColor="Black" Text="Edit pokemon name"></asp:Label>
         <br />
         <br />
         <asp:TextBox ID="TextBoxName" runat="server"></asp:TextBox>
+  
 &nbsp;&nbsp;
         <asp:Label ID="LabelPokemonName" runat="server" Text="Pokemon name"></asp:Label>
         <br />
         <br />
-        <asp:Button ID="ButtonUpdate" runat="server" Text="Button" />
+        <asp:Button ID="ButtonUpdate" runat="server" Text="Button" /> -->
 
  <br />
      <br />

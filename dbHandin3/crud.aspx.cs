@@ -20,7 +20,7 @@ namespace dbHandin3
             {
                 FormsAuthentication.RedirectToLoginPage();
             }           
-            UpdateGridView();         
+            UpdateGridView();
         }
 
         public string MyDb()
@@ -41,16 +41,17 @@ namespace dbHandin3
             SqlConnection conn = new SqlConnection(MyDb());
             SqlCommand cmd = null;
             SqlDataReader rdr = null;
-            string sqlsel = "select catchid,name,nextevolution,lvl,experience,health,power,defense,speed,image from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias= '" + GetUser() + "'";
+            string sqlsel = "select catchid,name,nextevolution,lvl,experience,health,power,defense,speed,fk_pokehunterid,fk_pokemonid, image from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias= '" + GetUser() + "'";
 
             try
             {
                 conn.Open();
                 cmd = new SqlCommand(sqlsel, conn);
                 rdr = cmd.ExecuteReader();
+                   
+                    GridViewPokemons.DataSource = rdr;
+                    GridViewPokemons.DataBind();
 
-                GridViewPokemons.DataSource = rdr;
-                GridViewPokemons.DataBind();
             }
             catch (Exception ex)
             {
@@ -93,31 +94,6 @@ namespace dbHandin3
 
         }
 
-        // evolve pokemon
-        protected void GridViewPokemons_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SqlConnection conn = new SqlConnection(MyDb());
-            SqlCommand cmd = null;
-            string sqlupd = "update pokecatches set companyname = @companyname, phone = @phone where shipperid = @shipperid";
-
-            try
-            {
-      
-            }
-            catch (Exception ex)
-            {
-                LabelMessage.Text = ex.Message;
-            }
-            finally
-            {
-                conn.Close();
-                UpdateGridView();
-            }
-
-            TextBoxName.Text = GridViewPokemons.SelectedRow.Cells[4].Text;
-            LabelPokemonName.Text = "ID: " + GridViewPokemons.SelectedRow.Cells[3].Text;
-        }
-
         // Display random pokemon on page
         protected void ButtonCatchPokemon_Click(object sender, EventArgs e)
         {
@@ -126,7 +102,6 @@ namespace dbHandin3
             SqlDataReader rdr = null;
             SqlCommand cmd = null;
             string sqlsel = "select pokemonid, number, name, nextevolution, image from pokemons";
-            string sqlselCatches = "select catchid,name,nextevolution,health,power,defense,speed,experience, fk_pokehunterid from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias='" + GetUser() + "'";
 
             List<Pokemon> pokemonList = new List<Pokemon>();
 
@@ -156,8 +131,8 @@ namespace dbHandin3
                     writePokemon += "</div>";                   
                     LiteralPokemon.Text = writePokemon;
 
-                    Session["caughtPokemonId"] = randomPokemon.id;
-                    Session["pokemonName"] = randomPokemon.name;
+                    Application["caughtPokemonId"] = randomPokemon.id;
+                    Application["pokemonName"] = randomPokemon.name;
 
                 }
             }
@@ -172,6 +147,114 @@ namespace dbHandin3
             }         
            
         }
+
+        // Method to get nextevolution id
+        public int GetNextEvolutionId()
+        {
+            SqlConnection conn = new SqlConnection(MyDb());
+            SqlDataReader rdr = null;
+            SqlCommand cmd = null;
+            int nextEvoId = 0;
+            string nextEvoName = GridViewPokemons.SelectedRow.Cells[5].Text;
+            string sqlsel = "select pokemonid from pokemons where name ='"+ nextEvoName +"'";
+
+            try
+            {
+                conn.Open();
+                cmd = new SqlCommand(sqlsel, conn);
+                rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    Evolve e = new Evolve();
+                    nextEvoId = e.pokemonid = (int)rdr["pokemonid"];
+
+                }
+            }
+            catch (Exception ex)
+            {
+                LiteralCatchMessage.Text = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+
+            }
+            return nextEvoId;
+        }
+
+        // Method to get DB values for evolve
+        public void GetDBValues()
+        {
+            SqlConnection conn = new SqlConnection(MyDb());
+            SqlDataReader rdr = null;
+            SqlCommand cmd = null;
+            int pokehunterid = 0;
+            int catchid = 0;
+            string sqlsel = "select catchid,fk_pokehunterid from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and name= '"+ GridViewPokemons.SelectedRow.Cells[4].Text + "' and alias= '" + GetUser() + "'";
+
+            try
+            {
+                conn.Open();
+                cmd = new SqlCommand(sqlsel, conn);
+                rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    Evolve e = new Evolve();
+                    pokehunterid = e.hunterid = (int)rdr["fk_pokehunterid"];
+                    catchid = e.catchid = (int)rdr["catchid"];
+
+                    Application["fk_pokehunterid"] = pokehunterid;
+                    Application["catchid"] = catchid;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                LiteralCatchMessage.Text = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+
+            }
+        }
+
+        // evolve pokemon
+        protected void GridViewPokemons_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SqlConnection conn = new SqlConnection(MyDb());
+            SqlCommand cmd = null;
+            string sqlupd = "update pokecatches set fk_pokemonid = @pokemonid where fk_pokehunterid = @pokehunterid and catchid = @catchid";
+
+            try
+            {
+                conn.Open();
+
+                cmd = new SqlCommand(sqlupd, conn);
+                cmd.Parameters.Add("@pokemonid", SqlDbType.Int);
+                cmd.Parameters.Add("@pokehunterid", SqlDbType.Int);
+                cmd.Parameters.Add("@catchid", SqlDbType.Int);
+
+                cmd.Parameters["@pokemonid"].Value = GetNextEvolutionId();
+                cmd.Parameters["@pokehunterid"].Value = Convert.ToInt32(GridViewPokemons.SelectedRow.Cells[12].Text);
+                cmd.Parameters["@catchid"].Value = Convert.ToInt32(GridViewPokemons.SelectedRow.Cells[3].Text);
+
+                cmd.ExecuteNonQuery();
+                LabelMessage.Text = "Pokémon has been evolved";
+            }
+            catch (Exception ex)
+            {
+                LabelMessage.Text = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+                UpdateGridView();
+            }
+        }
+
 
         // Method to return current pokehunterid in session
         public int GetHunterId()
@@ -247,7 +330,7 @@ namespace dbHandin3
                     newrow["speed"] = speed;
                     newrow["experience"] = experience;
                     newrow["fk_pokehunterid"] = GetHunterId();
-                    newrow["fk_pokemonid"] = Session["caughtPokemonId"];
+                    newrow["fk_pokemonid"] = Application["caughtPokemonId"];
                     dt.Rows.Add(newrow);
 
                     cmd = new SqlCommand(sqlins, conn);
@@ -262,7 +345,7 @@ namespace dbHandin3
 
                     da.InsertCommand = cmd;
                     da.Update(ds, "caughtPokemon");
-                    LiteralCatchMessage.Text = "<div class='alert alert-success msg'>You were strong enough! <b>" + Session["pokemonName"] + "</b> has been caught!</div>";
+                    LiteralCatchMessage.Text = "<div class='alert alert-success msg'>You were strong enough! <b>" + Application["pokemonName"] + "</b> has been caught!</div>";
 
                     UpdateGridView();
 
@@ -279,7 +362,7 @@ namespace dbHandin3
                 }
             else
             {
-                LiteralCatchMessage.Text = "<div class='alert alert-danger msg'><b>" + Session["pokemonName"] + "</b> is way too strong. Try again or return when you are more experienced ..</div>";
+                LiteralCatchMessage.Text = "<div class='alert alert-danger msg'><b>" + Application["pokemonName"] + "</b> is way too strong. Try again or return when you are more experienced ..</div>";
             }
         }
     }
