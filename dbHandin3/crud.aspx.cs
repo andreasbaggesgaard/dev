@@ -384,7 +384,8 @@ namespace dbHandin3
 
                     da.InsertCommand = cmd;
                     da.Update(ds, "caughtPokemon");
-                    LiteralCatchMessage.Text = "<div class='alert alert-success msg'>You were strong enough! <b>" + Application["pokemonName"] + "</b> has been caught!</div>";
+                    LiteralCatchMessage.Text = "<div class='alert alert-success msg'>You were strong enough! <b>" 
+                        + Application["pokemonName"] + "</b> has been caught!</div>";
 
                     UpdateGridView();
 
@@ -401,7 +402,9 @@ namespace dbHandin3
                 }
             else
             {
-                LiteralCatchMessage.Text = "<div class='alert alert-danger msg'><b>" + Application["pokemonName"] + "</b> is way too strong. Try again or return when you are more experienced ..</div>";
+                LiteralCatchMessage.Text = "<div class='alert alert-danger msg'><b>" 
+                    + Application["pokemonName"] + 
+                    "</b> is way too strong. Try again or return when you are more experienced ..</div>";
             }
         }
     }
