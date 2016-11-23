@@ -41,11 +41,7 @@ namespace dbHandin3
             SqlConnection conn = new SqlConnection(MyDb());
             SqlCommand cmd = null;
             SqlDataReader rdr = null;
-            string sqlsel = "select catchid,name,nextevolution,lvl,experience,health,power,defense,speed, image 
-                from pokecatches, pokehunters, pokemons 
-                where pokecatches.fk_pokehunterid = pokehunters.hunterid 
-                and pokecatches.fk_pokemonid = pokemons.pokemonid 
-                and alias= '" + GetUser() + "'";
+            string sqlsel = "select catchid,name,nextevolution,lvl,experience,health,power,defense,speed, image from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias= '" + GetUser() + "'";
 
             try
             {
@@ -193,10 +189,7 @@ namespace dbHandin3
             SqlDataReader rdr = null;
             SqlCommand cmd = null;
             int catchid = 0;
-            string sqlsel = "select catchid from pokecatches, pokehunters, pokemons 
-                where pokecatches.fk_pokehunterid = pokehunters.hunterid 
-                and pokecatches.fk_pokemonid = pokemons.pokemonid 
-                and name= '"+ GridViewPokemons.SelectedRow.Cells[4].Text + "'";
+            string sqlsel = "select catchid from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and name= '"+ GridViewPokemons.SelectedRow.Cells[4].Text + "'";
 
             try
             {
@@ -229,10 +222,7 @@ namespace dbHandin3
             SqlDataReader rdr = null;
             SqlCommand cmd = null;
             int pokehunterid = 0;
-            string sqlsel = "select fk_pokehunterid from pokecatches, pokehunters, pokemons 
-                where pokecatches.fk_pokehunterid = pokehunters.hunterid 
-                and pokecatches.fk_pokemonid = pokemons.pokemonid 
-                and name= '" + GridViewPokemons.SelectedRow.Cells[4].Text + "' and alias= '" + GetUser() + "'";
+            string sqlsel = "select fk_pokehunterid from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and name= '" + GridViewPokemons.SelectedRow.Cells[4].Text + "' and alias= '" + GetUser() + "'";
 
             try
             {
@@ -263,9 +253,7 @@ namespace dbHandin3
         {
             SqlConnection conn = new SqlConnection(MyDb());
             SqlCommand cmd = null;
-            string sqlupd = "update pokecatches set fk_pokemonid = @pokemonid 
-                where fk_pokehunterid = @pokehunterid 
-                and catchid = @catchid";
+            string sqlupd = "update pokecatches set fk_pokemonid = @pokemonid where fk_pokehunterid = @pokehunterid and catchid = @catchid";
 
             try
             {
@@ -337,13 +325,12 @@ namespace dbHandin3
             DataTable dt = null;
             SqlCommand cmd = null;
             string sqlsel = "select * from pokecatches";
-            string sqlins = "insert into pokecatches 
-                values (@lvl, @health, @power, @defense, @speed, @experience, @fk_pokehunterid, @fk_pokemonid)";
+            string sqlins = "insert into pokecatches values (@lvl, @health, @power, @defense, @speed, @experience, @fk_pokehunterid, @fk_pokemonid)";
 
             Random ifCaught = new Random();
             int number = ifCaught.Next(1, 10);
              
-            if(number % 2 == 0)
+            if(number == 3 || number == 6 || number == 9)
             {
                 try
                 {
@@ -385,8 +372,7 @@ namespace dbHandin3
 
                     da.InsertCommand = cmd;
                     da.Update(ds, "caughtPokemon");
-                    LiteralCatchMessage.Text = "<div class='alert alert-success msg'>You were strong enough! <b>" 
-                        + Application["pokemonName"] + "</b> has been caught!</div>";
+                    LiteralCatchMessage.Text = "<div class='alert alert-success msg'>You were strong enough! <b>" + Application["pokemonName"] + "</b> has been caught!</div>";
 
                     UpdateGridView();
 
@@ -403,9 +389,7 @@ namespace dbHandin3
                 }
             else
             {
-                LiteralCatchMessage.Text = "<div class='alert alert-danger msg'><b>" 
-                    + Application["pokemonName"] + 
-                    "</b> is way too strong. Try again or return when you are more experienced ..</div>";
+                LiteralCatchMessage.Text = "<div class='alert alert-danger msg'><b>" + Application["pokemonName"] + "</b> is way too strong. Try again or return when you are more experienced ..</div>";
             }
         }
     }
