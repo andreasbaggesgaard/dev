@@ -41,7 +41,11 @@ namespace dbHandin3
             SqlConnection conn = new SqlConnection(MyDb());
             SqlCommand cmd = null;
             SqlDataReader rdr = null;
-            string sqlsel = "select catchid,name,nextevolution,lvl,experience,health,power,defense,speed, image from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias= '" + GetUser() + "'";
+            string sqlsel = "select catchid,name,nextevolution,lvl,experience,health,power,defense,speed, image 
+                from pokecatches, pokehunters, pokemons 
+                where pokecatches.fk_pokehunterid = pokehunters.hunterid 
+                and pokecatches.fk_pokemonid = pokemons.pokemonid 
+                and alias= '" + GetUser() + "'";
 
             try
             {
@@ -189,7 +193,10 @@ namespace dbHandin3
             SqlDataReader rdr = null;
             SqlCommand cmd = null;
             int catchid = 0;
-            string sqlsel = "select catchid from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and name= '"+ GridViewPokemons.SelectedRow.Cells[4].Text + "'";
+            string sqlsel = "select catchid from pokecatches, pokehunters, pokemons 
+                where pokecatches.fk_pokehunterid = pokehunters.hunterid 
+                and pokecatches.fk_pokemonid = pokemons.pokemonid 
+                and name= '"+ GridViewPokemons.SelectedRow.Cells[4].Text + "'";
 
             try
             {
@@ -222,7 +229,10 @@ namespace dbHandin3
             SqlDataReader rdr = null;
             SqlCommand cmd = null;
             int pokehunterid = 0;
-            string sqlsel = "select fk_pokehunterid from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and name= '" + GridViewPokemons.SelectedRow.Cells[4].Text + "' and alias= '" + GetUser() + "'";
+            string sqlsel = "select fk_pokehunterid from pokecatches, pokehunters, pokemons 
+                where pokecatches.fk_pokehunterid = pokehunters.hunterid 
+                and pokecatches.fk_pokemonid = pokemons.pokemonid 
+                and name= '" + GridViewPokemons.SelectedRow.Cells[4].Text + "' and alias= '" + GetUser() + "'";
 
             try
             {
@@ -253,7 +263,9 @@ namespace dbHandin3
         {
             SqlConnection conn = new SqlConnection(MyDb());
             SqlCommand cmd = null;
-            string sqlupd = "update pokecatches set fk_pokemonid = @pokemonid where fk_pokehunterid = @pokehunterid and catchid = @catchid";
+            string sqlupd = "update pokecatches set fk_pokemonid = @pokemonid 
+                where fk_pokehunterid = @pokehunterid 
+                and catchid = @catchid";
 
             try
             {
