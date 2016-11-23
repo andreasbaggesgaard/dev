@@ -42,7 +42,21 @@
 				</div>
 			</div>
 		  </div>
-    
+
+
+    <!-- -->
+     <div class="row">
+         <h3 style="text-align:center;margin-top:5%;margin-bottom:5%;">Wild Pokémons waiting to be caught!</h3>
+         <div class="col-md-12">
+            <asp:Repeater ID="RepeaterPokemons" runat="server">
+            <ItemTemplate>             
+                    <div style="float:left;margin-left: 12%;">
+                        <img src="<%# Eval("image") %>" width="200"/>                   
+               </div>
+            </ItemTemplate>
+        </asp:Repeater>
+             </div>
+    </div>
 
     
     

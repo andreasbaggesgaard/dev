@@ -15,7 +15,40 @@ namespace dbHandin3
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            ShowPokemons();
+        }
 
+        public string MyDb()
+        {
+            database db = new database();
+            return db.dbConnection();
+        }
+
+        private void ShowPokemons()
+        {
+            SqlConnection conn = new SqlConnection(MyDb());
+            SqlCommand cmd = null;
+            SqlDataReader rdr = null;
+
+            string sqlsel = "SELECT TOP 3 * FROM pokemons";
+
+            try
+            {
+                conn.Open();
+                cmd = new SqlCommand(sqlsel, conn);
+           
+                rdr = cmd.ExecuteReader();
+                RepeaterPokemons.DataSource = rdr;
+                RepeaterPokemons.DataBind();
+            }
+            catch (Exception ex)
+            {
+                LabelMessage.Text = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
 
         protected void ButtonLogin_Click(object sender, EventArgs e)

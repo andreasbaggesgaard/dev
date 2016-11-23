@@ -32,9 +32,6 @@
         </div>
     </div>
     
-    <h4>
-        <asp:Label ID="LabelCaught" runat="server" Text="Caught Pokémons:"></asp:Label>
-     </h4>
         <asp:GridView ID="GridViewPokemons" CssClass="table crud" runat="server" 
             OnSelectedIndexChanged="GridViewPokemons_SelectedIndexChanged"
             OnRowDeleting="GridViewPokemons_RowDeleting"
@@ -43,7 +40,7 @@
                 <asp:CommandField ShowDeleteButton="True" ControlStyle-CssClass="btn btn-danger btn-xs">
 <ControlStyle CssClass="btn btn-danger btn-xs"></ControlStyle>
                 </asp:CommandField>
-                <asp:CommandField ShowSelectButton="True" SelectText="Evolve" />
+                <asp:CommandField ShowSelectButton="True" SelectText="Evolve"  ControlStyle-CssClass="btn btn-success btn-xs"/>
                 <asp:ImageField DataImageUrlField="image" ControlStyle-Width="100">
 <ControlStyle Width="100px"></ControlStyle>
                 </asp:ImageField>

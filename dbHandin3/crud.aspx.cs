@@ -41,7 +41,7 @@ namespace dbHandin3
             SqlConnection conn = new SqlConnection(MyDb());
             SqlCommand cmd = null;
             SqlDataReader rdr = null;
-            string sqlsel = "select catchid,name,nextevolution,lvl,experience,health,power,defense,speed,fk_pokehunterid,fk_pokemonid, image from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias= '" + GetUser() + "'";
+            string sqlsel = "select catchid,name,nextevolution,lvl,experience,health,power,defense,speed, image from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and alias= '" + GetUser() + "'";
 
             try
             {
@@ -96,8 +96,7 @@ namespace dbHandin3
 
         // Display random pokemon on page
         protected void ButtonCatchPokemon_Click(object sender, EventArgs e)
-        {
-           
+        {          
             SqlConnection conn = new SqlConnection(MyDb());
             SqlDataReader rdr = null;
             SqlCommand cmd = null;
@@ -148,7 +147,7 @@ namespace dbHandin3
            
         }
 
-        // Method to get nextevolution id
+        // Method to get nextevolutionid
         public int GetNextEvolutionId()
         {
             SqlConnection conn = new SqlConnection(MyDb());
@@ -183,15 +182,14 @@ namespace dbHandin3
             return nextEvoId;
         }
 
-        // Method to get DB values for evolve
-        public void GetDBValues()
+        // Method to get catchid for evolve
+        public int GetCatchId()
         {
             SqlConnection conn = new SqlConnection(MyDb());
             SqlDataReader rdr = null;
             SqlCommand cmd = null;
-            int pokehunterid = 0;
             int catchid = 0;
-            string sqlsel = "select catchid,fk_pokehunterid from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and name= '"+ GridViewPokemons.SelectedRow.Cells[4].Text + "' and alias= '" + GetUser() + "'";
+            string sqlsel = "select catchid from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and name= '"+ GridViewPokemons.SelectedRow.Cells[4].Text + "'";
 
             try
             {
@@ -202,12 +200,7 @@ namespace dbHandin3
                 while (rdr.Read())
                 {
                     Evolve e = new Evolve();
-                    pokehunterid = e.hunterid = (int)rdr["fk_pokehunterid"];
                     catchid = e.catchid = (int)rdr["catchid"];
-
-                    Application["fk_pokehunterid"] = pokehunterid;
-                    Application["catchid"] = catchid;
-
                 }
             }
             catch (Exception ex)
@@ -219,6 +212,40 @@ namespace dbHandin3
                 conn.Close();
 
             }
+            return catchid;
+        }
+
+        // Method to get catchid for evolve
+        public int GetPokehunterId()
+        {
+            SqlConnection conn = new SqlConnection(MyDb());
+            SqlDataReader rdr = null;
+            SqlCommand cmd = null;
+            int pokehunterid = 0;
+            string sqlsel = "select fk_pokehunterid from pokecatches, pokehunters, pokemons where pokecatches.fk_pokehunterid = pokehunters.hunterid and pokecatches.fk_pokemonid = pokemons.pokemonid and name= '" + GridViewPokemons.SelectedRow.Cells[4].Text + "' and alias= '" + GetUser() + "'";
+
+            try
+            {
+                conn.Open();
+                cmd = new SqlCommand(sqlsel, conn);
+                rdr = cmd.ExecuteReader();
+
+                while (rdr.Read())
+                {
+                    Evolve e = new Evolve();
+                    pokehunterid = e.hunterid = (int)rdr["fk_pokehunterid"];
+                }
+            }
+            catch (Exception ex)
+            {
+                LiteralCatchMessage.Text = ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+
+            }
+            return pokehunterid;
         }
 
         // evolve pokemon
@@ -238,8 +265,8 @@ namespace dbHandin3
                 cmd.Parameters.Add("@catchid", SqlDbType.Int);
 
                 cmd.Parameters["@pokemonid"].Value = GetNextEvolutionId();
-                cmd.Parameters["@pokehunterid"].Value = Convert.ToInt32(GridViewPokemons.SelectedRow.Cells[12].Text);
-                cmd.Parameters["@catchid"].Value = Convert.ToInt32(GridViewPokemons.SelectedRow.Cells[3].Text);
+                cmd.Parameters["@pokehunterid"].Value = GetPokehunterId();
+                cmd.Parameters["@catchid"].Value = GetCatchId();
 
                 cmd.ExecuteNonQuery();
                 LabelMessage.Text = "Pokémon has been evolved";
@@ -303,7 +330,7 @@ namespace dbHandin3
             Random ifCaught = new Random();
             int number = ifCaught.Next(1, 10);
 
-            if(number == 3 || number == 6 || number == 9)
+            if(number % 2 == 0)
             {
                 try
                 {
