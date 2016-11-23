@@ -337,7 +337,8 @@ namespace dbHandin3
             DataTable dt = null;
             SqlCommand cmd = null;
             string sqlsel = "select * from pokecatches";
-            string sqlins = "insert into pokecatches values (@lvl, @health, @power, @defense, @speed, @experience, @fk_pokehunterid, @fk_pokemonid)";
+            string sqlins = "insert into pokecatches 
+                values (@lvl, @health, @power, @defense, @speed, @experience, @fk_pokehunterid, @fk_pokemonid)";
 
             Random ifCaught = new Random();
             int number = ifCaught.Next(1, 10);
