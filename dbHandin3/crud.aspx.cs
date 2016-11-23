@@ -329,7 +329,7 @@ namespace dbHandin3
 
             Random ifCaught = new Random();
             int number = ifCaught.Next(1, 10);
-
+             
             if(number % 2 == 0)
             {
                 try
