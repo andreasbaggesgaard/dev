@@ -13,9 +13,36 @@ namespace dbHandin3
 {
     public partial class Index : System.Web.UI.Page
     {
+        DataSet ds;
+        DataTable dt;
+
         protected void Page_Load(object sender, EventArgs e)
         {
             ShowPokemons();
+            UpdatePage();
+        }
+
+        public void UpdatePage()
+        {
+            try
+            {
+                ds = new DataSet();
+                ds.ReadXml(Server.MapPath("~/XMLFile/XMLSponsors.xml"));
+                dt = ds.Tables["Sponsor"];
+
+                RepeaterSponsors.DataSource = dt;
+                RepeaterSponsors.DataBind();
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                RepeaterSponsors.DataSource = dt;
+                RepeaterSponsors.DataBind();
+
+            }
         }
 
         public string MyDb()
@@ -74,7 +101,7 @@ namespace dbHandin3
                 {
                     rdr.Read();
                    
-                    FormsAuthentication.RedirectFromLoginPage(TextBoxAlias.Text.ToLower(), true);
+                    FormsAuthentication.SetAuthCookie(TextBoxAlias.Text.ToLower(), true);
 
                     if(TextBoxAlias.Text.ToLower() == "webmaster")
                     {

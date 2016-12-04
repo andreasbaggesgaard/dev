@@ -57,6 +57,23 @@
         </asp:Repeater>
              </div>
     </div>
+    <br />
+    <br />
+    <hr />
+    <div class="row" style="min-height:400px">
+         <h3 style="text-align:center;margin-top:5%;margin-bottom:5%;"><b>Sponsors</b></h3>
+         <div class="col-md-12">
+             <div style="margin-left:17%">
+            <asp:Repeater ID="RepeaterSponsors" runat="server">
+            <ItemTemplate>             
+                    <div style="float:left;margin-left: 12%;">
+                        <td><img src="images/<%# Eval("Logo") %>" alt="Sponsor Logo" width="100px"/></td>                  
+               </div>
+            </ItemTemplate>
+        </asp:Repeater>
+                 </div>
+             </div>
+    </div>
 
     
     

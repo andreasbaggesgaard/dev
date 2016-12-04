@@ -1,0 +1,27 @@
+<?xml version="1.0" standalone="yes"?>
+<Sponsors>
+  <Sponsor>
+    <SponsorID>1</SponsorID>
+    <Companyname>Beats</Companyname>
+    <Website>www.beats.com</Website>
+    <Logo>beats.jpg</Logo>
+  </Sponsor>
+  <Sponsor>
+    <SponsorID>2</SponsorID>
+    <Companyname>Adidas</Companyname>
+    <Website>www.adidas.com</Website>
+    <Logo>adidas.jpg</Logo>
+  </Sponsor>
+  <Sponsor>
+    <SponsorID>3</SponsorID>
+    <Companyname>Samsung</Companyname>
+    <Website>www.samsung.com</Website>
+    <Logo>samsung.jpg</Logo>
+  </Sponsor>
+  <Sponsor>
+    <SponsorID>4</SponsorID>
+    <Companyname>Cat Company</Companyname>
+    <Website>www.cat.com</Website>
+    <Logo>kat3icon.jpg</Logo>
+  </Sponsor>
+</Sponsors>

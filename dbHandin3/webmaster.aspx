@@ -17,6 +17,7 @@
                 <asp:CommandField ShowSelectButton="True" ControlStyle-CssClass="table-select" />
             </Columns>
         </asp:GridView>
+   <a href="sponsors.aspx" style="font-weight:bolder;font-size:20px;"><span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span> Manage sponsors</a>
        </div>
        <div class="col-md-3">
            <h4>Select a Pokémon</h4>
